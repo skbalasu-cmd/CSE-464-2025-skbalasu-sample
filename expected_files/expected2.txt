@@ -1,0 +1,16 @@
+Number Of Nodes: 15
+Nodes: [black, blue, blue, cyan, cyan, green, green, pink, pink, red, red, white, white, yellow, yellow]
+Number Of Edges: 12
+Edges
+blue -> black
+cyan -> blue
+cyan -> green
+green -> black
+pink -> blue
+pink -> red
+red -> black
+white -> cyan
+white -> pink
+white -> yellow
+yellow -> green
+yellow -> red

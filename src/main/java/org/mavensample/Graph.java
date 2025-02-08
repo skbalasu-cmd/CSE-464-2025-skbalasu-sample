@@ -14,7 +14,7 @@ public class Graph {
         File file = new File(filepath);
         // Reads the file using the graphviz parser
         this.graph = new Parser().read(file);
-        System.out.println(this.graph.toString());
+        //System.out.println(this.graph.toString());
         this.graph.setDirected(true);
     }
 
