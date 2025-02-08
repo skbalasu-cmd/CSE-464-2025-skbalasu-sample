@@ -7,4 +7,5 @@ digraph {
     e -> f;
     e -> g;
     f -> h;
+    g -> h;
 }

@@ -1,6 +1,6 @@
 Number Of Nodes: 8
 Nodes: [a, b, c, d, e, f, g, h]
-Number Of Edges: 8
+Number Of Edges: 9
 Edges
 a -> b
 a -> e
@@ -10,3 +10,4 @@ d -> a
 e -> f
 e -> g
 f -> h
+g -> h
