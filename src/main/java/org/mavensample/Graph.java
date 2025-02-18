@@ -7,7 +7,12 @@ import java.util.*;
 
 
 public class Graph {
+
     private MutableGraph graph;
+
+    public Graph() {
+        this.graph = Factory.mutGraph("graph").setDirected(true);
+    }
 
     // Parse the DOT file and create a directed graph
     public void parseGraph(String filepath) throws IOException {
@@ -52,6 +57,25 @@ public class Graph {
         }
         Collections.sort(edges);
         return edges;
+    }
+    // Add a single node
+    public void addNode(String label) {
+        for (MutableNode node : graph.nodes()) {
+            if (node.name().toString().equals(label)) {
+                System.out.println("Node " + label + " already exists.");
+                return; // Avoid duplicates
+            }
+        }
+        MutableNode newNode = Factory.mutNode(label); // Create a new node
+        graph.add(newNode);
+        System.out.println("Added node: " + label);
+    }
+
+    // Add multiple nodes
+    public void addNodes(String[] labels) {
+        for (String label : labels) {
+            addNode(label);
+        }
     }
 
     @Override
