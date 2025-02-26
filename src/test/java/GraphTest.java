@@ -52,6 +52,11 @@ public class GraphTest {
         testInsertMultipleNOdesWithDotGraphInitialization("dot_files/input1.dot");
     }
 
+    @Test
+    public void unittest7() {
+        testInsertEdge();
+    }
+
     private void testFeature1(String dotFilePath, String expectedFilePath, String outputFilePath) throws IOException {
         graph.parseGraph(dotFilePath);
 
@@ -102,6 +107,24 @@ public class GraphTest {
         Assert.assertEquals(8, graph.getNodeCount());
         graph.addNodes(new String[]{"a", "b", "z"});
         Assert.assertEquals(9, graph.getNodeCount());
+    }
+
+    private void testInsertEdge() {
+        graph.addEdge("A", "B");
+        Assert.assertEquals(2, graph.getNodeCount());
+        Assert.assertEquals(1, graph.getEdgeCount());
+        graph.addEdge("A", "B");
+        Assert.assertEquals(2, graph.getNodeCount());
+        Assert.assertEquals(1, graph.getEdgeCount());
+        graph.addEdge("B", "C");
+        Assert.assertEquals(3, graph.getNodeCount());
+        Assert.assertEquals(2, graph.getEdgeCount());
+        graph.addEdge("D", "F");
+        Assert.assertEquals(5, graph.getNodeCount());
+        Assert.assertEquals(3, graph.getEdgeCount());
+        graph.addEdge("G", "C");
+        Assert.assertEquals(6, graph.getNodeCount());
+        Assert.assertEquals(4, graph.getEdgeCount()); 
     }
 }
 

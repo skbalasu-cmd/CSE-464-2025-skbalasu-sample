@@ -4,6 +4,7 @@ import guru.nidi.graphviz.model.*;
 
 import java.io.*;
 import java.util.*;
+import java.util.stream.Collectors;
 
 
 public class Graph {
@@ -30,29 +31,31 @@ public class Graph {
 
     // Get number of edges
     public int getEdgeCount() {
-        int edgeCount = 0;
-        for (MutableNode node : graph.nodes()) {
-            edgeCount += node.links().size();
+        int edgeNo = 0;
+        for (MutableNode n : graph.nodes()) {
+            edgeNo += n.links().size();
         }
-        return edgeCount;
+        return edgeNo;
     }
 
-    // Get all nodes as a list
     public List<String> getNodes() {
-        List<String> nodes = new ArrayList<>();
-        for (MutableNode node : graph.nodes()) {
-            nodes.add(node.name().toString());
+        /*List<String> nodes = new ArrayList<>();
+        for (MutableNode n : graph.nodes()) {
+            nodes.add(n.name().toString());
         }
         Collections.sort(nodes);
-        return nodes;
+        return nodes;*/
+        return graph.nodes().stream()
+                .map(n -> n.name().toString())
+                .sorted()
+                .collect(Collectors.toList());
     }
 
-    // Get all edges in "a -> b" format
     public List<String> getEdges() {
         List<String> edges = new ArrayList<>();
-        for (MutableNode node : graph.nodes()) {
-            for (Link link : node.links()) {
-                edges.add(node.name() + " -> " + link.to().name());
+        for (MutableNode n : graph.nodes()) {
+            for (Link link : n.links()) {
+                edges.add(n.name() + " -> " + link.to().name());
             }
         }
         Collections.sort(edges);
@@ -60,8 +63,8 @@ public class Graph {
     }
     // Add a single node
     public void addNode(String label) {
-        for (MutableNode node : graph.nodes()) {
-            if (node.name().toString().equals(label)) {
+        for (MutableNode n : graph.nodes()) {
+            if (n.name().toString().equals(label)) {
                 System.out.println("Node " + label + " already exists.");
                 return; // Avoid duplicates
             }
@@ -71,11 +74,47 @@ public class Graph {
         System.out.println("Added node: " + label);
     }
 
-    // Add multiple nodes
     public void addNodes(String[] labels) {
         for (String label : labels) {
             addNode(label);
         }
+    }
+
+    public void addEdge(String srcLabel, String dstLabel) {
+        MutableNode srcNode = null;
+        for (MutableNode n : graph.nodes()) {
+            if (n.name().toString().equals(srcLabel)) {
+                srcNode = n;
+                break;
+            }
+        }
+
+        if (srcNode == null) {
+            srcNode = Factory.mutNode(srcLabel);
+            graph.add(srcNode);
+        }
+
+        for (Link link : srcNode.links()) {
+            if (link.to().name().toString().equals(dstLabel)) {
+                System.out.println("Edge " + srcLabel + " -> " + dstLabel + " already exists.");
+                return;
+            }
+        }
+
+        MutableNode dstNode = null;
+        for (MutableNode node : graph.nodes()) {
+            if (node.name().toString().equals(dstLabel)) {
+                dstNode = node;
+                break;
+            }
+        }
+        if (dstNode == null) {
+            dstNode = Factory.mutNode(dstLabel);
+            graph.add(dstNode);
+        }
+
+        srcNode.addLink(dstNode);
+        System.out.println("Added edge: " + srcLabel + " -> " + dstLabel);
     }
 
     @Override
