@@ -6,6 +6,9 @@ import org.mavensample.Graph;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
+import javax.imageio.ImageIO;
+import java.awt.image.BufferedImage;
+import java.io.File;
 
 public class GraphTest {
     private Graph graph;
@@ -55,6 +58,11 @@ public class GraphTest {
     @Test
     public void unittest7() {
         testInsertEdge();
+    }
+
+    @Test
+    public void unittest8() throws IOException  {
+        testFeature4("dot_files/input1.dot");
     }
 
     private void testFeature1(String dotFilePath, String expectedFilePath, String outputFilePath) throws IOException {
@@ -124,7 +132,46 @@ public class GraphTest {
         Assert.assertEquals(3, graph.getEdgeCount());
         graph.addEdge("G", "C");
         Assert.assertEquals(6, graph.getNodeCount());
-        Assert.assertEquals(4, graph.getEdgeCount()); 
+        Assert.assertEquals(4, graph.getEdgeCount());
+    }
+
+    public boolean compareImages(String expectedFilePath, String actualFilePath) throws IOException {
+        BufferedImage imgA = ImageIO.read(new File(expectedFilePath));
+        BufferedImage imgB = ImageIO.read(new File(actualFilePath));
+
+        // Check if dimensions are equal
+        if (imgA.getWidth() != imgB.getWidth() || imgA.getHeight() != imgB.getHeight()) {
+            return false;
+        }
+
+        // Compare pixel by pixel
+        for (int y = 0; y < imgA.getHeight(); y++) {
+            for (int x = 0; x < imgA.getWidth(); x++) {
+                if (imgA.getRGB(x, y) != imgB.getRGB(x, y)) {
+                    return false;
+                }
+            }
+        }
+        return true;
+    }
+
+    private void testFeature4(String dotFilePath) throws IOException {
+        graph.parseGraph(dotFilePath);
+        graph.addEdge("b", "g");
+        graph.addNode("z");
+        graph.outputDOTGraph("output.dot");
+        String expected = Files.readString(Paths.get("expected_files/expected_output.dot"))
+                .replaceAll("\r\n", "\n")
+                .trim();
+
+        String output = Files.readString(Paths.get("output.dot"))
+                .replaceAll("\r\n", "\n")
+                .trim();
+        Assert.assertEquals(expected, output);
+        graph.outputGraphics("output.png", "png");
+
+        boolean imagesAreEqual = compareImages("expected_files/expected_output.png", "output.png");
+        Assert.assertTrue("The expected output image and the actual output image do not match.", imagesAreEqual);
     }
 }
 

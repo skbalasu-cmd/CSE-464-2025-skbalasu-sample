@@ -1,4 +1,7 @@
 package org.mavensample;
+import guru.nidi.graphviz.engine.Format;
+import guru.nidi.graphviz.engine.Graphviz;
+import guru.nidi.graphviz.engine.GraphvizV8Engine;
 import guru.nidi.graphviz.parse.Parser;
 import guru.nidi.graphviz.model.*;
 
@@ -135,5 +138,23 @@ public class Graph {
         try (BufferedWriter writer = new BufferedWriter(new FileWriter(filepath))) {
             writer.write(this.toString());
         }
+    }
+
+    public void outputDOTGraph(String path) throws IOException {
+        try (BufferedWriter writer = new BufferedWriter(new FileWriter(path))) {
+            writer.write(graph.toString());
+        }
+    }
+
+    public void outputGraphics(String path, String format) throws IOException {
+        if (!format.equalsIgnoreCase("png")) {
+            throw new IllegalArgumentException("Only PNG format is supported.");
+        }
+
+        Graphviz.useEngine(new GraphvizV8Engine());
+
+        Graphviz.fromGraph(graph)
+                .render(Format.PNG)
+                .toFile(new File(path));
     }
 }
