@@ -231,6 +231,7 @@ public class GraphTest {
         Assert.assertEquals(0, graph.getNodeCount());
     }
 
+    // Testing remove edge method
     private void testRemoveEdge() {
         try {
             graph.removeEdge("A", "B");
