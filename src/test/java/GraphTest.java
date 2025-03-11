@@ -1,8 +1,8 @@
-import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.Assert;
 import org.mavensample.Graph;
+
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
@@ -63,6 +63,21 @@ public class GraphTest {
     @Test
     public void unittest8() throws IOException  {
         testFeature4("dot_files/input1.dot");
+    }
+
+    @Test
+    public void unittest9() {
+        testRemoveNode();
+    }
+
+    @Test
+    public void unittest10() {
+        testRemoveNodes();
+    }
+
+    @Test
+    public void unittest11() {
+        testRemoveEdge();
     }
 
     private void testFeature1(String dotFilePath, String expectedFilePath, String outputFilePath) throws IOException {
@@ -172,6 +187,45 @@ public class GraphTest {
 
         boolean imagesAreEqual = compareImages("expected_files/expected_output.png", "output.png");
         Assert.assertTrue("The expected output image and the actual output image do not match.", imagesAreEqual);
+    }
+
+    private void testRemoveNode() {
+        try {
+            graph.removeNode("A");
+        } catch (Exception e) {
+            System.out.println("graph does not have node to remove.");
+        }
+        graph.addNode("A");
+        Assert.assertEquals(1, graph.getNodeCount());
+        graph.removeNode("A");
+        Assert.assertEquals(0, graph.getNodeCount());
+    }
+
+    private void testRemoveNodes() {
+        try {
+            graph.removeNodes(new String[]{"A", "B", "C"});
+        } catch (Exception e) {
+            System.out.println("Nodes listed do not exist.");
+        }
+        graph.addNodes(new String[]{"A", "B", "C"});
+        Assert.assertEquals(3, graph.getNodeCount());
+        graph.removeNodes(new String[]{"A", "B", "C"});
+        System.out.println("graph node count: " + graph.getNodeCount());
+        Assert.assertEquals(0, graph.getNodeCount());
+    }
+
+    private void testRemoveEdge() {
+        try {
+            graph.removeEdge("A", "B");
+        } catch (Exception e) {
+            System.out.println("Nodes listed do not exist.");
+        }
+        graph.addEdge("A", "B");
+        graph.addEdge("A", "C");
+        System.out.println("graph edge count: " + graph.getEdgeCount());
+        graph.removeEdge("A", "B");
+        System.out.println("graph edge count: " + graph.getEdgeCount());
+        Assert.assertEquals(1, graph.getEdgeCount());
     }
 }
 

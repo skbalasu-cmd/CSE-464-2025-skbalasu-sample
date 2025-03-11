@@ -14,6 +14,7 @@ public class Graph {
 
     private MutableGraph graph;
 
+
     public Graph() {
         this.graph = Factory.mutGraph("graph").setDirected(true);
     }
@@ -118,6 +119,74 @@ public class Graph {
 
         srcNode.addLink(dstNode);
         System.out.println("Added edge: " + srcLabel + " -> " + dstLabel);
+    }
+
+    public void removeNode(String label) {
+        MutableGraph newGraph = Factory.mutGraph("graph").setDirected(true);
+
+        for (MutableNode node : new ArrayList<>(graph.nodes())) {
+            if (!node.name().toString().equals(label)) {
+                newGraph.add(node);
+            }
+        }
+
+        graph = newGraph;
+
+        System.out.println("Remaining Nodes after removal:");
+        for (MutableNode node : graph.nodes()) {
+            System.out.println("Node: " + node.name().toString());
+        }
+    }
+
+
+    public void removeNodes(String[] labels) {
+        for(String label: labels) {
+            removeNode(label);
+        }
+    }
+
+    public void removeEdge(String srcLabel, String dstLabel) {
+        MutableNode srcNode = null;
+        MutableNode dstNode = null;
+
+        for(MutableNode node: graph.nodes()) {
+            if (node.name().toString().equals(srcLabel)) {
+                srcNode = node;
+            }
+            if (node.name().toString().equals(dstLabel)) {
+                dstNode = node;
+            }
+        }
+            if(srcNode == null && dstNode != null) {
+                throw new IllegalArgumentException("Source Node does not exist");
+            }
+
+            if(dstNode == null && srcNode != null) {
+                throw new IllegalArgumentException("Destination Node does not exist.");
+            }
+
+            if(srcNode == null && dstNode == null) {
+                throw new IllegalArgumentException("Source and Destination Nodes do not exist.");
+            }
+
+        boolean edgeRemoved = false;
+        List<Link> newLinks = new ArrayList<>();
+
+        for (Link linkedNode : srcNode.links()) {
+            if (!linkedNode.to().name().toString().equals(dstLabel)) {
+                newLinks.add(linkedNode);
+            } else {
+                edgeRemoved = true;
+            }
+        }
+
+        if (!edgeRemoved) {
+            throw new IllegalArgumentException("Edge from " + srcLabel + " to " + dstLabel + " does not exist.");
+        }
+
+        srcNode.links().clear();
+        srcNode.links().addAll(newLinks);
+
     }
 
     @Override
