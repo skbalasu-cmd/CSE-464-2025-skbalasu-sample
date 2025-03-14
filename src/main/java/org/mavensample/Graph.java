@@ -192,28 +192,28 @@ public class Graph {
     public Path GraphSearchBFS(String src, String dst) {
         if (src.equals(dst)) return new Path(Collections.singletonList(src));
 
-        Queue<List<String>> queue = new LinkedList<>();
+        Stack<List<String>> stack = new Stack<>();
         Set<String> visited = new HashSet<>();
 
-        queue.add(Collections.singletonList(src));
-        visited.add(src);
+        stack.push(Collections.singletonList(src));
 
-        while (!queue.isEmpty()) {
-            List<String> path = queue.poll();
+        while (!stack.isEmpty()) {
+            List<String> path = stack.pop();
             String lastNode = path.get(path.size() - 1);
+
+            if (visited.contains(lastNode)) continue;
+            visited.add(lastNode);
 
             MutableNode currentNode = getNodeByName(lastNode);
             if (currentNode == null) continue;
 
-            // Iterate over links instead of assuming MutableNode
             for (Link link : currentNode.links()) {
-                String neighborName = link.to().name().toString(); // Get the destination node's name
+                String neighborName = link.to().name().toString();
 
                 if (!visited.contains(neighborName)) {
                     List<String> newPath = new ArrayList<>(path);
                     newPath.add(neighborName);
-                    queue.add(newPath);
-                    visited.add(neighborName);
+                    stack.push(newPath);
 
                     if (neighborName.equals(dst)) {
                         return new Path(newPath);
@@ -270,4 +270,6 @@ public class Graph {
                 .render(Format.PNG)
                 .toFile(new File(path));
     }
+
+    // This is a baseline for main, dfs, bfs code.
 }
