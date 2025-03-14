@@ -189,7 +189,7 @@ public class Graph {
 
     }
 
-    public Path GraphSearchDFS(String src, String dst) {
+    public Path GraphSearch(String src, String dst) {
         if (src.equals(dst)) return new Path(Collections.singletonList(src));
 
         Stack<List<String>> stack = new Stack<>();
@@ -272,5 +272,4 @@ public class Graph {
     }
 
     // This is a baseline for main, dfs, bfs code.
-
 }
