@@ -189,6 +189,50 @@ public class Graph {
 
     }
 
+    public Path GraphSearch(String src, String dst) {
+        if (src.equals(dst)) return new Path(Collections.singletonList(src));
+
+        Queue<List<String>> queue = new LinkedList<>();
+        Set<String> visited = new HashSet<>();
+
+        queue.add(Collections.singletonList(src));
+        visited.add(src);
+
+        while (!queue.isEmpty()) {
+            List<String> path = queue.poll();
+            String lastNode = path.get(path.size() - 1);
+
+            MutableNode currentNode = getNodeByName(lastNode);
+            if (currentNode == null) continue;
+
+            // Iterate over links instead of assuming MutableNode
+            for (Link link : currentNode.links()) {
+                String neighborName = link.to().name().toString(); // Get the destination node's name
+
+                if (!visited.contains(neighborName)) {
+                    List<String> newPath = new ArrayList<>(path);
+                    newPath.add(neighborName);
+                    queue.add(newPath);
+                    visited.add(neighborName);
+
+                    if (neighborName.equals(dst)) {
+                        return new Path(newPath);
+                    }
+                }
+            }
+        }
+        return null;
+    }
+
+    private MutableNode getNodeByName(String nodeName) {
+        for (MutableNode node : graph.nodes()) {
+            if (node.name().toString().equals(nodeName)) {
+                return node;
+            }
+        }
+        return null;
+    }
+
     @Override
     public String toString() {
         String information = "";

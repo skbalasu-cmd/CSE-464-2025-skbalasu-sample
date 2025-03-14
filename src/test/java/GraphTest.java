@@ -2,6 +2,7 @@ import org.junit.Before;
 import org.junit.Test;
 import org.junit.Assert;
 import org.mavensample.Graph;
+import org.mavensample.Path;
 
 import java.io.IOException;
 import java.nio.file.Files;
@@ -78,6 +79,11 @@ public class GraphTest {
     @Test
     public void unittest11() {
         testRemoveEdge();
+    }
+
+    @Test
+    public void unittest12() throws IOException {
+        testGraphSearchBFS();
     }
 
     private void testFeature1(String dotFilePath, String expectedFilePath, String outputFilePath) throws IOException {
@@ -244,6 +250,24 @@ public class GraphTest {
         graph.removeEdge("A", "B");
         System.out.println("graph edge count: " + graph.getEdgeCount());
         Assert.assertEquals(1, graph.getEdgeCount());
+    }
+
+
+    private void testGraphSearchBFS() throws IOException {
+        graph.addEdge("A", "D");
+        graph.addEdge("A", "B");
+        graph.addEdge("B", "E");
+        graph.addEdge("B", "C");
+        graph.addEdge("E", "F");
+
+        Path path = graph.GraphSearch("A", "F");
+
+        String output = Files.readString(Paths.get("expected_files/bfs_path_expected.txt"))
+                .replaceAll("\r\n", "\n")
+                .trim();
+        System.out.println(path.toString());
+        Assert.assertEquals(output, path.toString());
+
     }
 }
 
