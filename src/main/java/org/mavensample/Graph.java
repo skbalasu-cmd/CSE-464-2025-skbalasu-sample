@@ -189,6 +189,16 @@ public class Graph {
 
     }
 
+    public enum Algorithm { BFS, DFS };
+
+    public Path GraphSearch(String src, String dst, Algorithm algo) {
+        if (algo == Algorithm.BFS) {
+            return bfsSearch(src, dst);
+        } else {
+            return dfsSearch(src, dst);
+        }
+    }
+
     public Path dfsSearch(String src, String dst) {
         if (src.equals(dst)) return new Path(Collections.singletonList(src));
 
