@@ -189,7 +189,52 @@ public class Graph {
 
     }
 
-    public Path GraphSearch(String src, String dst) {
+    public enum Algorithm { BFS, DFS };
+
+    public Path GraphSearch(String src, String dst, Algorithm algo) {
+        if (algo == Algorithm.BFS) {
+            return bfsSearch(src, dst);
+        } else {
+            return dfsSearch(src, dst);
+        }
+    }
+
+    public Path dfsSearch(String src, String dst) {
+        if (src.equals(dst)) return new Path(Collections.singletonList(src));
+
+        Stack<List<String>> stack = new Stack<>();
+        Set<String> visited = new HashSet<>();
+
+        stack.push(Collections.singletonList(src));
+
+        while (!stack.isEmpty()) {
+            List<String> path = stack.pop();
+            String lastNode = path.get(path.size() - 1);
+
+            if (visited.contains(lastNode)) continue;
+            visited.add(lastNode);
+
+            MutableNode currentNode = getNodeByName(lastNode);
+            if (currentNode == null) continue;
+
+            for (Link link : currentNode.links()) {
+                String neighborName = link.to().name().toString();
+
+                if (!visited.contains(neighborName)) {
+                    List<String> newPath = new ArrayList<>(path);
+                    newPath.add(neighborName);
+                    stack.push(newPath);
+
+                    if (neighborName.equals(dst)) {
+                        return new Path(newPath);
+                    }
+                }
+            }
+        }
+        return null;
+    }
+
+    public Path bfsSearch(String src, String dst) {
         if (src.equals(dst)) return new Path(Collections.singletonList(src));
 
         Queue<List<String>> queue = new LinkedList<>();
@@ -270,4 +315,6 @@ public class Graph {
                 .render(Format.PNG)
                 .toFile(new File(path));
     }
+
+    // This is a baseline for main, dfs, bfs code.
 }
