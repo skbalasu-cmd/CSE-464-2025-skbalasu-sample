@@ -260,7 +260,7 @@ public class GraphTest {
         graph.addEdge("B", "C");
         graph.addEdge("E", "F");
 
-        Path path = graph.GraphSearchBFS("A", "F");
+        Path path = graph.GraphSearch("A", "F");
 
         String output = Files.readString(Paths.get("expected_files/bfs_path_expected.txt"))
                 .replaceAll("\r\n", "\n")

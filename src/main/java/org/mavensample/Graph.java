@@ -189,7 +189,7 @@ public class Graph {
 
     }
 
-    public Path GraphSearchBFS(String src, String dst) {
+    public Path GraphSearch(String src, String dst) {
         if (src.equals(dst)) return new Path(Collections.singletonList(src));
 
         Queue<List<String>> queue = new LinkedList<>();
