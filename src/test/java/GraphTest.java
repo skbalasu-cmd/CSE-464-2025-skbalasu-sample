@@ -83,7 +83,7 @@ public class GraphTest {
 
     @Test
     public void unittest12() throws IOException {
-        testGraphSearchDFS();
+        testGraphSearchBFS();
     }
 
     private void testFeature1(String dotFilePath, String expectedFilePath, String outputFilePath) throws IOException {
@@ -253,16 +253,16 @@ public class GraphTest {
     }
 
 
-    private void testGraphSearchDFS() throws IOException {
+    private void testGraphSearchBFS() throws IOException {
         graph.addEdge("A", "D");
         graph.addEdge("A", "B");
         graph.addEdge("B", "E");
         graph.addEdge("B", "C");
         graph.addEdge("E", "F");
 
-        Path path = graph.GraphSearch("A", "F");
+        Path path = graph.GraphSearchBFS("A", "F");
 
-        String output = Files.readString(Paths.get("expected_files/dfs_path_expected.txt"))
+        String output = Files.readString(Paths.get("expected_files/bfs_path_expected.txt"))
                 .replaceAll("\r\n", "\n")
                 .trim();
         System.out.println(path.toString());
