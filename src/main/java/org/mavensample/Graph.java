@@ -270,6 +270,7 @@ public class Graph {
     }
 
     private MutableNode getNodeByName(String nodeName) {
+        System.out.println("Hello World.");
         for (MutableNode node : graph.nodes()) {
             if (node.name().toString().equals(nodeName)) {
                 return node;
