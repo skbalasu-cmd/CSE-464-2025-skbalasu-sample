@@ -29,6 +29,7 @@ public class Graph {
     }
 
     // Get number of nodes
+    // Adding a comment
     public int getNodeCount() {
         return graph.nodes().size();
     }
